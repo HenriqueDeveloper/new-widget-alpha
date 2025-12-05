@@ -1,0 +1,36 @@
+{
+  "widget": {
+    "name": "Alpha Control",
+    "description": "Widget para controle de menus e inserção de CSS/JS personalizados.",
+    "short_description": "Controle de menus + CSS/JS",
+    "version": "1.0.0",
+    "interface_version": 2,
+    "init_once": false,
+    "locale": ["pt"],
+    "installation": true,
+    "support": {
+      "link": "https://henriquedeveloper.github.io/widget-control-alpha/",
+      "email": ""
+    }
+  },
+
+  "locations": {
+    "settings": {
+      "url": "https://henriquedeveloper.github.io/widget-control-alpha/index.html"
+    }
+  },
+
+  "js": [
+    "https://henriquedeveloper.github.io/widget-control-alpha/script.js"
+  ],
+
+  "css": [
+    "https://henriquedeveloper.github.io/widget-control-alpha/styles.css"
+  ],
+
+  "permissions": [
+    "settings",
+    "storage",
+    "account_current"
+  ]
+}
