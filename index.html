@@ -2,9 +2,9 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alpha Control</title>
-    <link rel="stylesheet" href="styles.css" />
-    <!-- SDK do Kommo -->
+    <!-- SDK do Kommo - deve vir primeiro -->
     <script src="https://apps.amocrm.com/widget/js/api.js"></script>
 </head>
 <body>
@@ -32,6 +32,22 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- O script.js será carregado automaticamente pelo manifest.json -->
+  <!-- Se precisar carregar manualmente, descomente abaixo -->
+  <!--
+  <script>
+    (function() {
+      function init() {
+        if (typeof AmoWidget !== 'undefined') {
+          // Script já será carregado pelo manifest.json
+          console.log('AmoWidget disponível, aguardando script.js do manifest');
+        } else {
+          setTimeout(init, 100);
+        }
+      }
+      init();
+    })();
+  </script>
+  -->
 </body>
 </html>

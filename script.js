@@ -1,8 +1,17 @@
-// Verificar se AmoWidget está disponível
-if (typeof AmoWidget === 'undefined') {
-    console.error('AmoWidget não está disponível. Certifique-se de que o SDK do Kommo está carregado.');
-} else {
-    AmoWidget.init(async () => {
+// Função para inicializar o widget
+(function() {
+    'use strict';
+    
+    // Aguardar AmoWidget estar disponível
+    function initWidget() {
+        if (typeof AmoWidget === 'undefined') {
+            // Tentar novamente após um delay
+            setTimeout(initWidget, 100);
+            return;
+        }
+
+        // Inicializar o widget
+        AmoWidget.init(async () => {
         // Funções de storage
         async function getStorage(key) {
             try {
@@ -30,11 +39,11 @@ if (typeof AmoWidget === 'undefined') {
 
         // Bloqueio de menus - versão melhorada
         function blockMenus() {
-        let observer = null;
-        let interval = null;
-        let timeoutId = null;
+            let observer = null;
+            let interval = null;
+            let timeoutId = null;
 
-        function hideMenuItems() {
+            function hideMenuItems() {
             try {
                 // Múltiplos seletores possíveis para o menu do Kommo
                 const selectors = [
@@ -147,56 +156,56 @@ if (typeof AmoWidget === 'undefined') {
             }
         }, 60000);
 
-        // Retornar função de limpeza (útil para testes)
-        return () => {
-            if (observer) {
-                observer.disconnect();
-            }
-            if (interval) {
-                clearInterval(interval);
-            }
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-        };
+            // Retornar função de limpeza (útil para testes)
+            return () => {
+                if (observer) {
+                    observer.disconnect();
+                }
+                if (interval) {
+                    clearInterval(interval);
+                }
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                }
+            };
         }
 
         // Aplicação de CSS / JS personalizados
         function applyCustomCode(css, js) {
-        // CSS
-        let cssTag = document.getElementById("alphaCustomCSS");
-        if (cssTag) {
-            cssTag.remove();
-        }
-        
-        if (css && css.trim()) {
-            cssTag = document.createElement("style");
-            cssTag.id = "alphaCustomCSS";
-            cssTag.innerHTML = css;
-            document.head.appendChild(cssTag);
-        }
-
-        // JS - Remover script anterior
-        let jsTag = document.getElementById("alphaCustomJS");
-        if (jsTag) {
-            jsTag.remove();
-        }
-
-        // JS - Criar e executar novo script
-        if (js && js.trim()) {
-            jsTag = document.createElement("script");
-            jsTag.id = "alphaCustomJS";
-            try {
-                // Usar Function para executar o código em um contexto seguro
-                const scriptFunction = new Function(js);
-                scriptFunction();
-            } catch (e) {
-                console.error("Erro ao executar JS personalizado:", e);
-                // Fallback: inserir como texto e deixar o navegador executar
-                jsTag.textContent = js;
-                document.body.appendChild(jsTag);
+            // CSS
+            let cssTag = document.getElementById("alphaCustomCSS");
+            if (cssTag) {
+                cssTag.remove();
             }
-        }
+            
+            if (css && css.trim()) {
+                cssTag = document.createElement("style");
+                cssTag.id = "alphaCustomCSS";
+                cssTag.innerHTML = css;
+                document.head.appendChild(cssTag);
+            }
+
+            // JS - Remover script anterior
+            let jsTag = document.getElementById("alphaCustomJS");
+            if (jsTag) {
+                jsTag.remove();
+            }
+
+            // JS - Criar e executar novo script
+            if (js && js.trim()) {
+                jsTag = document.createElement("script");
+                jsTag.id = "alphaCustomJS";
+                try {
+                    // Usar Function para executar o código em um contexto seguro
+                    const scriptFunction = new Function(js);
+                    scriptFunction();
+                } catch (e) {
+                    console.error("Erro ao executar JS personalizado:", e);
+                    // Fallback: inserir como texto e deixar o navegador executar
+                    jsTag.textContent = js;
+                    document.body.appendChild(jsTag);
+                }
+            }
         }
 
         // Carregar valores salvos e aplicar
@@ -232,5 +241,22 @@ if (typeof AmoWidget === 'undefined') {
                 alert("Aplicado!");
             };
         }
+        });
+    }
+
+    // Iniciar quando DOM estiver pronto
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initWidget);
+    } else {
+        // DOM já está pronto
+        initWidget();
+    }
+
+    // Fallback: tentar após window.load
+    window.addEventListener('load', function() {
+        if (typeof AmoWidget !== 'undefined' && !window.alphaWidgetInitialized) {
+            window.alphaWidgetInitialized = true;
+            initWidget();
+        }
     });
-}
+})();
